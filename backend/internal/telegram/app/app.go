@@ -65,7 +65,8 @@ func sendMiniAppButton(
 	url string,
 ) {
 	msg := tgbotapi.NewMessage(chatID, "Открой мини-приложение:")
-	button := tgbotapi.NewInlineKeyboardButtonURL("🛒 Список покупок", url)
+	webApp := tgbotapi.WebAppInfo{URL: url}
+	button := tgbotapi.NewInlineKeyboardButtonWebApp("🛒 Список покупок", webApp)
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(button))
 	msg.ReplyMarkup = keyboard
 

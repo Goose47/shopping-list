@@ -6,7 +6,7 @@ toolchain go1.24.0
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.2-0.20221020003552-4126fa611266
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	golang.org/x/crypto v0.38.0
