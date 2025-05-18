@@ -3,7 +3,6 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"log/slog"
 	"shopping-list/internal/controllers"
 	envpkg "shopping-list/internal/domain/enums/env"
 )
