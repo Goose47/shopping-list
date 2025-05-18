@@ -38,7 +38,9 @@ func (app *App) Run() error {
 	u.Timeout = 60
 	updates := bot.GetUpdatesChan(u)
 
+	log.Info("start telegram poll")
 	for update := range updates {
+		log.Info("got telegram message")
 		if update.Message == nil || !update.Message.IsCommand() {
 			continue
 		}
