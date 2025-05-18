@@ -18,9 +18,10 @@ func main() {
 
 	telegram := telegramapp.New(log, cfg.Telegram.Token, cfg.AppURL)
 	go func() {
-		_ = telegram.Run()
+		err := telegram.Run()
+		log.Error("failed to run telegram", slog.Any("error", err))
 	}()
 
 	err := app.Server.Serve()
-	log.Error("application has stopped: %s", slog.Any("error", err))
+	log.Error("application has stopped", slog.Any("error", err))
 }

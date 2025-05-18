@@ -26,10 +26,11 @@ func New(
 
 func (app *App) Run() error {
 	const op = "telegram.App.Run"
-	//log := app.log.With(slog.String("op", op))
+	log := app.log.With(slog.String("op", op))
 
 	bot, err := tgbotapi.NewBotAPI(app.secret)
 	if err != nil {
+		log.Error("failed to create bot instance", slog.Any("error", err))
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
@@ -44,10 +45,11 @@ func (app *App) Run() error {
 
 		switch update.Message.Command() {
 		case "start":
-			sendMiniAppButton(bot, update.Message.Chat.ID, app.url)
+			sendMiniAppButton(log, bot, update.Message.Chat.ID, app.url)
 		default:
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Неизвестная команда")
-			_, _ = bot.Send(msg)
+			_, err = bot.Send(msg)
+			log.Error("failed to send message", slog.Any("error", err))
 		}
 	}
 
@@ -55,6 +57,7 @@ func (app *App) Run() error {
 }
 
 func sendMiniAppButton(
+	log *slog.Logger,
 	bot *tgbotapi.BotAPI,
 	chatID int64,
 	url string,
@@ -64,5 +67,8 @@ func sendMiniAppButton(
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(button))
 	msg.ReplyMarkup = keyboard
 
-	_, _ = bot.Send(msg)
+	_, err := bot.Send(msg)
+	if err != nil {
+		log.Error("failed to send button message", slog.Any("error", err))
+	}
 }
