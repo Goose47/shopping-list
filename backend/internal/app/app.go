@@ -9,8 +9,8 @@ import (
 	"shopping-list/internal/config"
 	"shopping-list/internal/controllers"
 
-	"shopping-list/internal/db/mysql"
-	//"shopping-list/internal/db/postgres"
+	//"shopping-list/internal/db/mysql"
+	"shopping-list/internal/db/postgres"
 	"shopping-list/internal/server"
 )
 
@@ -32,8 +32,8 @@ func New(
 	port int,
 	dbConfig config.DB,
 ) *App {
-	db, err := mysql.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
-	//db, err := postgres.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
+	//db, err := mysql.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
+	db, err := postgres.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
 	if err != nil {
 		panic(err)
 	}
