@@ -1,0 +1,14 @@
+env: "local"
+port: 8000
+app_url: "localhost"
+api_url: "localhost"
+jwt:
+  secret: "secret"
+db:
+  user: "root"
+  pass: "root"
+  dbname: "shopping-list"
+  host: "localhost"
+  port: 3306
+telegram:
+  token: ""
