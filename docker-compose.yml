@@ -46,11 +46,11 @@ services:
 
  certbot:
   image: certbot/certbot
-  container_name: markup_certbot
+  container_name: shopping-list_certbot
   volumes:
    - ./certbot/conf:/etc/letsencrypt
    - ./certbot/www:/var/www/certbot
-  command: certonly --webroot -w /var/www/certbot/ --email test@gmail.com -d api.rwfshr.ru -d rwfshr.ru --agree-tos --cert-name markup
+  command: certonly --webroot -w /var/www/certbot/ --email test@gmail.com -d api.rwfshr.ru -d rwfshr.ru --agree-tos --cert-name shopping-list
 
 networks:
  shopping-list-network:
