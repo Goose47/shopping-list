@@ -12,6 +12,9 @@ services:
    - ./nginx/conf.d/:/etc/nginx/conf.d/
   networks:
    - shopping-list-network
+  depends_on:
+   - backend
+   - frontend
 
  backend:
   container_name: backend
@@ -22,7 +25,9 @@ services:
    args:
     BUILD_PATH: ./cmd/shopping-list/shopping-list.go
   networks:
-   - shopping-list-network
+   - shopping-list-network\
+  depends_on:
+   - postgres
 
  frontend:
   container_name: frontend
