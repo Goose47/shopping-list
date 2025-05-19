@@ -39,10 +39,12 @@ func New(
 	}
 
 	helloCon := controllers.NewHelloController(log)
+	authCon := controllers.NewAuth(log, db)
 
 	router := server.NewRouter(
 		env,
 		helloCon,
+		authCon,
 	)
 	serverApp := serverapp.New(log, port, router)
 
