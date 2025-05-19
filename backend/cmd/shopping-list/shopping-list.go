@@ -12,7 +12,7 @@ import (
 func main() {
 	cfg := config.MustLoad()
 	log := logger.New(cfg.Env)
-	app := apppkg.New(log, cfg.Env, cfg.Port, cfg.DB)
+	app := apppkg.New(log, cfg.Env, cfg.Port, cfg.DB, cfg.Telegram)
 
 	app.TaskManager.Run()
 

@@ -31,6 +31,7 @@ func New(
 	env string,
 	port int,
 	dbConfig config.DB,
+	tgConfig config.Telegram,
 ) *App {
 	//db, err := mysql.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
 	db, err := postgres.New(dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Pass, dbConfig.DBName)
@@ -43,6 +44,8 @@ func New(
 
 	router := server.NewRouter(
 		env,
+		db,
+		tgConfig.Token,
 		helloCon,
 		authCon,
 	)
