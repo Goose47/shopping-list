@@ -1,11 +1,11 @@
 <template>
- <div>Hello from public!</div>
+ <div>Unautorized!</div>
 </template>
 
 <script setup>
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>

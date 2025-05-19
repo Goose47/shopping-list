@@ -11,6 +11,7 @@ import (
 func NewRouter(
 	env string,
 	helloCon *controllers.HelloController,
+	authCon *controllers.Auth,
 ) *gin.Engine {
 	var mode string
 	switch env {
@@ -30,6 +31,14 @@ func NewRouter(
 	r.Use(gin.Recovery())
 
 	r.GET("hello", helloCon.Hello)
+
+	api := r.Group("/api")
+	v1 := api.Group("/v1")
+	{
+		auth := v1.Group("/auth")
+
+		auth.GET("me", authCon.Me)
+	}
 
 	return r
 }

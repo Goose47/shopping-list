@@ -1,34 +1,46 @@
 package middleware
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
+	"net/url"
 	"shopping-list/internal/domain/models"
-	"shopping-list/internal/lib/jwt"
+	"sort"
 	"strings"
 )
 
-func AuthMiddleware(db *gorm.DB, jwtSecret string) gin.HandlerFunc {
+func TelegramAuthMiddleware(db *gorm.DB, botSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "missing authorization header"})
+		initData := c.GetHeader("Telegram-Init")
+		if initData == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "missing TelegramInit header"})
 			c.Abort()
 			return
 		}
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-		claims, err := jwt.ValidateToken(tokenString, jwtSecret)
+		data, err := url.ParseQuery(initData)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Sprintf("failed to parse init data: %s", err.Error())})
 			c.Abort()
 			return
 		}
 
-		// Fetch the user with roles from the database
+		err = validateInitData(data, botSecret)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Sprintf("invalid init data: %s", err.Error())})
+			c.Abort()
+			return
+		}
+
+		fmt.Println("INITDATA: ", initData)
+
 		var user models.User
-		if err := db.First(&user, claims.UserID).Error; err != nil {
+		if err := db.First(&user, 1).Error; err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "user not found"})
 			c.Abort()
 			return
@@ -38,4 +50,40 @@ func AuthMiddleware(db *gorm.DB, jwtSecret string) gin.HandlerFunc {
 		c.Set("user", user)
 		c.Next()
 	}
+}
+
+func validateInitData(
+	data url.Values,
+	botSecret string,
+) error {
+	hash := data.Get("hash")
+	if hash == "" {
+		return fmt.Errorf("init data hash is null")
+	}
+
+	delete(data, "hash")
+
+	var keys []string
+	for k := range data {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	var checkStrs []string
+	for _, k := range keys {
+		checkStrs = append(checkStrs, k+"="+data.Get(k))
+	}
+	checkString := strings.Join(checkStrs, "\n")
+
+	// Создаем секретный ключ
+	secretKey := sha256.Sum256([]byte(botSecret))
+	h := hmac.New(sha256.New, secretKey[:])
+	h.Write([]byte(checkString))
+	calculatedHash := hex.EncodeToString(h.Sum(nil))
+
+	if calculatedHash != hash {
+		return fmt.Errorf("hash mismatch")
+	}
+
+	return nil
 }

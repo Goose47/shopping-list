@@ -2,6 +2,7 @@ import './css/main.scss';
 
 import { createRouter, createWebHistory } from 'vue-router'
 import { createApp } from 'vue'
+import { setupAxios } from '@/bootstrap/setupAxios'
 
 import routes from './routes'
 import App from './App.vue'
@@ -20,3 +21,5 @@ const router = createRouter({
 app.use(router)
 
 app.mount('#app')
+
+setupAxios()
