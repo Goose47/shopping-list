@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth',  {
     actions: {
         async getUser() {
             try {
-                const res = await axios.post(
+                const res = await axios.get(
                     '/api/v1/auth/me',
                 )
                 this.user = res.data.payload
