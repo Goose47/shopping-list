@@ -60,31 +60,34 @@ func validateInitData(
 	data url.Values,
 	botSecret string,
 ) error {
-	hash := data.Get("hash")
+	var (
+		hash  string
+		pairs = make([]string, 0, len(data))
+	)
+
+	for k, v := range data {
+		if k == "hash" {
+			hash = v[0]
+			continue
+		}
+		pairs = append(pairs, k+"="+v[0])
+	}
+
 	if hash == "" {
-		return fmt.Errorf("init data hash is null")
+		return fmt.Errorf("missing hash")
 	}
 
-	delete(data, "hash")
+	sort.Strings(pairs)
+	checkString := strings.Join(pairs, "\n")
 
-	var keys []string
-	for k := range data {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
+	skHmac := hmac.New(sha256.New, []byte("WebAppData"))
+	skHmac.Write([]byte(botSecret))
 
-	var checkStrs []string
-	for _, k := range keys {
-		checkStrs = append(checkStrs, k+"="+data.Get(k))
-	}
-	checkString := strings.Join(checkStrs, "\n")
+	impHmac := hmac.New(sha256.New, skHmac.Sum(nil))
+	impHmac.Write([]byte(checkString))
 
-	// Создаем секретный ключ
-	secretKey := sha256.Sum256([]byte(botSecret))
-	h := hmac.New(sha256.New, secretKey[:])
-	h.Write([]byte(checkString))
-	calculatedHash := hex.EncodeToString(h.Sum(nil))
-
+	calculatedHash := hex.EncodeToString(impHmac.Sum(nil))
+	fmt.Println(checkString)
 	if calculatedHash != hash {
 		return fmt.Errorf("hash mismatch")
 	}
