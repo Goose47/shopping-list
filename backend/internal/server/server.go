@@ -4,6 +4,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"log/slog"
 	"shopping-list/internal/controllers"
 	envpkg "shopping-list/internal/domain/enums/env"
 	"shopping-list/internal/server/middleware"
@@ -11,6 +12,7 @@ import (
 
 // NewRouter sets router mode based on env, registers middleware, defines handlers and options and creates new gin router.
 func NewRouter(
+	log *slog.Logger,
 	env string,
 	db *gorm.DB,
 	botSecret string,
@@ -40,7 +42,7 @@ func NewRouter(
 	v1 := api.Group("/v1")
 	{
 		protected := v1.Group("")
-		protected.Use(middleware.TelegramAuthMiddleware(db, botSecret))
+		protected.Use(middleware.TelegramAuthMiddleware(log, db, botSecret))
 
 		auth := protected.Group("/auth")
 

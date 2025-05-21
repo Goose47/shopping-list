@@ -43,6 +43,7 @@ func New(
 	authCon := controllers.NewAuth(log, db)
 
 	router := server.NewRouter(
+		log,
 		env,
 		db,
 		tgConfig.Token,
