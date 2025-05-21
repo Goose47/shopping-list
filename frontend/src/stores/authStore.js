@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth',  {
                 const res = await axios.get(
                     '/api/v1/auth/me',
                 )
-                this.user = res.data.payload
+                this.user = res.data
             } catch {
                 this.user = null
             }
