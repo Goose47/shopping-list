@@ -33,7 +33,6 @@ const routes = [
         path: '/403',
         name: '403',
         component: HTTP403View,
-        beforeEnter: [checkAuth],
     },
 ]
 

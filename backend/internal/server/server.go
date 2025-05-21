@@ -41,6 +41,7 @@ func NewRouter(
 	{
 		protected := v1.Group("")
 		protected.Use(middleware.TelegramAuthMiddleware(db, botSecret))
+
 		auth := protected.Group("/auth")
 
 		auth.GET("me", authCon.Me)

@@ -1,10 +1,8 @@
 package background
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 	"log/slog"
-	"time"
 )
 
 type TaskManager struct {
@@ -20,12 +18,4 @@ func NewTaskManager(log *slog.Logger, db *gorm.DB) *TaskManager {
 }
 
 func (tm *TaskManager) Run() {
-	go tm.test()
-}
-
-func (tm *TaskManager) test() {
-	for {
-		fmt.Println("test..")
-		time.Sleep(5 * time.Second)
-	}
 }
