@@ -9,6 +9,7 @@ import { createPinia } from 'pinia'
 import routes from './routes'
 import App from './App.vue'
 import { setColorTheme } from '@/theme/colors.js'
+import defaultComponents from '@/components'
 
 setupTelegram()
 
@@ -27,6 +28,10 @@ app.use(router)
 const pinia = createPinia()
 
 app.use(pinia)
+
+for (let componentName in defaultComponents) {
+    app.component(componentName, defaultComponents[componentName])
+}
 
 app.mount('#app')
 

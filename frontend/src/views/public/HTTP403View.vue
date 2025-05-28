@@ -1,9 +1,10 @@
 <template>
- <div>Unautorized!</div>
+  <div>{{ tg }}</div>
+  <div>{{  }}</div>
 </template>
 
 <script setup>
-
+const tg = window.Telegram
 </script>
 
 <style scoped lang="scss">

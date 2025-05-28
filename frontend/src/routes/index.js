@@ -1,6 +1,7 @@
 import HomeView from '@/views/protected/HomeView.vue'
 import HTTP403View from "@/views/public/HTTP403View.vue";
 import {useAuthStore} from "@/stores/authStore.js";
+import ListsView from "@/views/protected/lists/ListsView.vue";
 
 const getUser = async () => {
     const userStore = useAuthStore()
@@ -23,17 +24,12 @@ const checkAuth = async (to, from, next) => {
 }
 
 const routes = [
-    {
-        path: '/',
-        name: 'home',
-        component: HomeView,
-        beforeEnter: [checkAuth],
-    },
-    {
-        path: '/403',
-        name: '403',
-        component: HTTP403View,
-    },
+    /** Protected */
+    { path: '/', name: 'home', component: HomeView, beforeEnter: [checkAuth] },
+    { path: '/lists', name: 'lists', component: ListsView, beforeEnter: [checkAuth] },
+
+    /** Public */
+    { path: '/403', name: '403', component: HTTP403View },
 ]
 
 export default routes
