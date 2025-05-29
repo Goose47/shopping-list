@@ -11,8 +11,8 @@
           :key="list.id"
       >
         <app-button
-            v-if="selectedList && selectedList.id === list.id"
             class="back-button"
+            :class="{'back-button__active': !!selectedList}"
             @click="unselectList"
         >
           <arrow-left-icon/>
@@ -105,6 +105,7 @@ const filteredItems = computed(() => {
       padding: 12px;
       border-radius: 12px;
       background-color: v-bind('color("secondary_bg_color")');
+      transition: width 0.3s ease;
 
       &__shrink {
         width: calc(90% - 12px);
@@ -113,9 +114,16 @@ const filteredItems = computed(() => {
   }
 
   .back-button {
-    width: 10%;
+    transition: all 0.3s ease;
+    width: 0;
     min-height: 48px;
-    min-width: 48px;
+    padding: 0;
+
+    &__active {
+      display: block;
+      width: 10%;
+      min-width: 48px;
+    }
   }
 }
 
