@@ -24,5 +24,7 @@ const props = defineProps({
   background-color: v-bind('color("bg_color")');
   color: v-bind('color("text_color")');
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 </style>
