@@ -11,18 +11,42 @@
           :key="list.id"
       >
         <app-button
-            class="back-button"
-            :class="{'back-button__active': !!selectedList}"
+            class="button__sliding"
+            :class="{
+              'button__sliding__active': !!selectedList,
+              'button__sliding__left': !!selectedList,
+            }"
             @click="unselectList"
         >
           <arrow-left-icon/>
         </app-button>
         <div
-            class="list-item__text"
-            :class="{ 'list-item__text__shrink': selectedList && selectedList.id === list.id }"
+            class="list-item__content"
+            :class="{
+              'list-item__content__shrink': selectedList && selectedList.id === list.id,
+              'list-item__content__active': isListCompleted(list),
+            }"
             @click="selectList(list)"
+            @touchstart="onTouchStart($event, list.id)"
+            @touchmove="onTouchMove($event, list.id)"
+            @touchend="onTouchEnd(list.id)"
         >
           {{ list.name }}
+        </div>
+        <div
+            class="list-item__buttons"
+            :style="getSwipeStyleForContainer(list.id)"
+        >
+          <app-button
+            :style="getSwipeStyleForButton(list.id)"
+          >
+            <arrow-left-icon/>
+          </app-button>
+          <app-button
+            :style="getSwipeStyleForButton(list.id)"
+          >
+            <arrow-left-icon/>
+          </app-button>
         </div>
       </div>
     </transition-group>
@@ -39,7 +63,11 @@
           :style="{ transitionDelay: (idx * 100) + 'ms' }"
       >
         <div
-            class="list-item__text"
+            class="list-item__content"
+            :class="{
+              'list-item__content__active': item.checked,
+            }"
+            @click="checkItem(item)"
         >
           {{ item.name }}
         </div>
@@ -79,12 +107,87 @@ const unselectList = () => {
   selectedList.value = null
 }
 
+const isListCompleted = (list) => {
+  return list.items.filter(i => !i.checked).length === 0
+}
+
 const filteredItems = computed(() => {
   if (!selectedList.value) {
     return []
   }
   return selectedList.value.items
 })
+
+const checkItem = (item) => {
+  item.checked = !item.checked
+}
+
+// ttouches.
+const touchStartX = ref(0)
+const touchCurrentX = ref(0)
+const swipedListId = ref(null)
+const swipeOffset = ref(0)  // сдвиг в px
+
+const onTouchStart = (event, id) => {
+  const touch = event.changedTouches[0]
+  touchStartX.value = touch.clientX
+  touchCurrentX.value = touch.clientX
+  swipedListId.value = null
+  swipeOffset.value = 0
+}
+
+const onTouchMove = (event, id) => {
+  const touch = event.changedTouches[0]
+  touchCurrentX.value = touch.clientX
+  let deltaX = touchCurrentX.value - touchStartX.value
+
+  if (deltaX < 0) { // свайп влево
+    swipeOffset.value = Math.max(deltaX, -150) // лимит сдвига -150px
+    swipedListId.value = id
+  }
+}
+
+const onTouchEnd = (id) => {
+  if (swipeOffset.value < -80) {
+    // Если свайп достаточно большой, фиксируем кнопку показаной
+    swipeOffset.value = -120
+    swipedListId.value = id
+  } else {
+    // Если свайп маленький, сбрасываем
+    swipeOffset.value = 0
+    swipedListId.value = null
+  }
+}
+
+const getSwipeStyleForContainer = (id) => {
+  if (swipedListId.value === id) {
+    return {
+      'width': `${-swipeOffset.value}px`,
+      'min-width': `${-swipeOffset.value}px`,
+      transition: swipeOffset.value === 0 ? 'width 0.3s ease' : 'none',
+    }
+  }
+  return {
+    width: '0',
+    transition: 'width 0.3s ease',
+  }
+}
+
+const getSwipeStyleForButton = (id) => {
+  if (swipedListId.value === id) {
+    return {
+      'min-height': '48px',
+      'max-width': '48px',
+      'margin-left': '12px',
+    }
+  }
+  return {
+    'min-height': '48px',
+    padding: '0',
+    transition: 'width 0.3s ease',
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -99,9 +202,10 @@ const filteredItems = computed(() => {
   display: flex;
   width: 100%;
   min-height: 48px;
+  max-height: 48px;
   justify-content: space-between;
 
-  &__text {
+  &__content {
     width: 100%;
     padding: 12px;
     border-radius: 12px;
@@ -109,20 +213,30 @@ const filteredItems = computed(() => {
     transition: width 0.3s ease;
 
     &__shrink {
-      width: calc(100% - 60px);
+      width: calc(100% - 60px) !important;
     }
+    &__active {
+      background-color: v-bind('color("accent_text_color")');
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    height: 48px;
   }
 }
 
-.back-button {
-  transition: all 0.3s ease;
+.button__sliding {
   width: 0 !important;
-  min-height: 48px;
   padding: 0 !important;
+  transition: all 0.3s ease;
+  min-height: 48px;
+
+  &__left {
+    margin-right: 12px;
+  }
 
   &__active {
-    display: block;
-    width: 10%;
     min-width: 48px;
   }
 }
