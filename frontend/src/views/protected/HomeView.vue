@@ -6,7 +6,7 @@
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-router.push({ name: 'lists.index' })
+router.push({ name: 'lists' })
 
 </script>
 
