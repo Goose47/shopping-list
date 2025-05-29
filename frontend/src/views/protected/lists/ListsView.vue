@@ -92,38 +92,38 @@ const filteredItems = computed(() => {
   list-style: none;
   padding: 0;
   margin-bottom: 24px;
+}
 
-  .list-item {
-    margin-bottom: 10px;
-    display: flex;
+.list-item {
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  justify-content: space-between;
+
+  &__text {
     width: 100%;
-    min-height: 48px;
-    justify-content: space-between;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: v-bind('color("secondary_bg_color")');
+    transition: width 0.3s ease;
 
-    &__text {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      background-color: v-bind('color("secondary_bg_color")');
-      transition: width 0.3s ease;
-
-      &__shrink {
-        width: calc(90% - 12px);
-      }
+    &__shrink {
+      width: calc(85%);
     }
   }
+}
 
-  .back-button {
-    transition: all 0.3s ease;
-    width: 0;
-    min-height: 48px;
-    padding: 0;
+.back-button {
+  transition: all 0.3s ease;
+  width: 0 !important;
+  min-height: 48px;
+  padding: 0 !important;
 
-    &__active {
-      display: block;
-      width: 10%;
-      min-width: 48px;
-    }
+  &__active {
+    display: block;
+    width: 10%;
+    min-width: 48px;
   }
 }
 
