@@ -18,7 +18,6 @@ import { color } from '@/theme/colors.js'
   background-color: v-bind('color("button_color")');
   color: v-bind('color("button_text_color")');
   cursor: pointer;
-  transition: background-color 0.2s ease;
 
   &:hover {
     opacity: 0.9;
