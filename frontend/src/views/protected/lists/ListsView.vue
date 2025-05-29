@@ -109,7 +109,7 @@ const filteredItems = computed(() => {
     transition: width 0.3s ease;
 
     &__shrink {
-      width: calc(85%);
+      width: calc(100% - 60px);
     }
   }
 }
