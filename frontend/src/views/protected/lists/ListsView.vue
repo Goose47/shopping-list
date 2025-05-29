@@ -38,7 +38,7 @@
             class="list-item__buttons"
             :style="getSwipeStyleForContainer(list.id)"
         >
-          <app-button><arrow-left-icon/></app-button>
+<!--          <app-button><arrow-left-icon/></app-button>-->
           <app-button><cross-icon @click="removeList(list)"/></app-button>
         </div>
       </div>
@@ -151,7 +151,8 @@ const onTouchMove = (event, id) => {
 const onTouchEnd = (id) => {
   if (swipeOffset.value < -80) {
     // Если свайп достаточно большой, фиксируем кнопку показаной
-    swipeOffset.value = -136
+    // swipeOffset.value = -136
+    swipeOffset.value = -76
     swipedListId.value = id
   } else {
     // Если свайп маленький, сбрасываем
@@ -174,7 +175,8 @@ const getSwipeStyleForContent = (id) => {
 }
 const getSwipeStyleForContainer = (id) => {
   if (swipedListId.value === id) {
-    const right = -120 -swipeOffset.value
+    // const right = -120 -swipeOffset.value
+    const right = -60 -swipeOffset.value
     return {
       'right': `${right}px`,
       transition: swipeOffset.value === 0 ? 'right 0.3s ease' : 'none',
@@ -223,8 +225,10 @@ const getSwipeStyleForContainer = (id) => {
     height: 48px;
 
     position: absolute;
-    right: -108px;
-    width: 108px;
+    //right: -108px;
+    //width: 108px;
+    right: -48px;
+    width: 48px;
     gap: 12px;
   }
 }
