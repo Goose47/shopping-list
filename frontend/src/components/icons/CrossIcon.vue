@@ -1,0 +1,23 @@
+<template>
+  <svg
+      style="width: 48px;height: 48px;margin-top: -12px;"
+      width="800px"
+      height="800px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M16 8L8 16M8.00001 8L16 16" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</template>
+
+<script setup>
+
+const props = defineProps({
+})
+
+</script>
+
+<style scoped lang="scss">
+
+</style>

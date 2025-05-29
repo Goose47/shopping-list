@@ -30,6 +30,7 @@
             @touchstart="onTouchStart($event, list.id)"
             @touchmove="onTouchMove($event, list.id)"
             @touchend="onTouchEnd(list.id)"
+            :style="getSwipeStyleForContent(list.id)"
         >
           {{ list.name }}
         </div>
@@ -37,16 +38,8 @@
             class="list-item__buttons"
             :style="getSwipeStyleForContainer(list.id)"
         >
-          <app-button
-            :style="getSwipeStyleForButton(list.id)"
-          >
-            <arrow-left-icon/>
-          </app-button>
-          <app-button
-            :style="getSwipeStyleForButton(list.id)"
-          >
-            <arrow-left-icon/>
-          </app-button>
+          <app-button><arrow-left-icon/></app-button>
+          <app-button><cross-icon @click="removeList(list)"/></app-button>
         </div>
       </div>
     </transition-group>
@@ -83,6 +76,7 @@ import {color} from '@/theme/colors.js'
 import {ref, computed} from "vue";
 import testData from './testData.json'
 import ArrowLeftIcon from "@/components/icons/ArrowLeftIcon.vue";
+import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const lists = ref([])
 const getLists = () => {
@@ -105,6 +99,13 @@ const selectList = (list) => {
 }
 const unselectList = () => {
   selectedList.value = null
+}
+
+const removeList = (list) => {
+  lists.value = lists.value.filter(l => l.id !== list.id)
+  if (selectedList.value) {
+    selectedList.value = null
+  }
 }
 
 const isListCompleted = (list) => {
@@ -142,7 +143,7 @@ const onTouchMove = (event, id) => {
   let deltaX = touchCurrentX.value - touchStartX.value
 
   if (deltaX < 0) { // свайп влево
-    swipeOffset.value = Math.max(deltaX, -150) // лимит сдвига -150px
+    swipeOffset.value = Math.max(deltaX, -180) // лимит сдвига -150px
     swipedListId.value = id
   }
 }
@@ -150,7 +151,7 @@ const onTouchMove = (event, id) => {
 const onTouchEnd = (id) => {
   if (swipeOffset.value < -80) {
     // Если свайп достаточно большой, фиксируем кнопку показаной
-    swipeOffset.value = -120
+    swipeOffset.value = -136
     swipedListId.value = id
   } else {
     // Если свайп маленький, сбрасываем
@@ -159,32 +160,29 @@ const onTouchEnd = (id) => {
   }
 }
 
-const getSwipeStyleForContainer = (id) => {
+const getSwipeStyleForContent = (id) => {
   if (swipedListId.value === id) {
     return {
-      'width': `${-swipeOffset.value}px`,
-      'min-width': `${-swipeOffset.value}px`,
-      transition: swipeOffset.value === 0 ? 'width 0.3s ease' : 'none',
+      'margin-right': `${-swipeOffset.value - 12}px`,
+      transition: swipeOffset.value === 0 ? 'margin-right 0.3s ease' : 'none',
     }
   }
   return {
-    width: '0',
-    transition: 'width 0.3s ease',
+    'margin-right': '0',
+    transition: 'margin-right 0.3s ease',
   }
 }
-
-const getSwipeStyleForButton = (id) => {
+const getSwipeStyleForContainer = (id) => {
   if (swipedListId.value === id) {
+    const right = -120 -swipeOffset.value
     return {
-      'min-height': '48px',
-      'max-width': '48px',
-      'margin-left': '12px',
+      'right': `${right}px`,
+      transition: swipeOffset.value === 0 ? 'right 0.3s ease' : 'none',
     }
   }
   return {
-    'min-height': '48px',
-    padding: '0',
-    transition: 'width 0.3s ease',
+    'right': '-120px',
+    transition: 'right 0.3s ease',
   }
 }
 
@@ -223,6 +221,11 @@ const getSwipeStyleForButton = (id) => {
   &__buttons {
     display: flex;
     height: 48px;
+
+    position: absolute;
+    right: -108px;
+    width: 108px;
+    gap: 12px;
   }
 }
 
