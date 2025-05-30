@@ -4,23 +4,62 @@
     "name": "Список покупок",
     "items": [
       { "id": 1, "name": "Молоко", "checked": false },
-      { "id": 2, "name": "Хлеб", "checked": true }
+      { "id": 2, "name": "Хлеб", "checked": true },
+      { "id": 3, "name": "Яйца", "checked": false },
+      { "id": 4, "name": "Сыр", "checked": false },
+      { "id": 5, "name": "Кофе", "checked": true }
     ]
   },
   {
     "id": 2,
     "name": "Домашние дела",
     "items": [
-      { "id": 3, "name": "Почистить ванну", "checked": false },
-      { "id": 4, "name": "Пропылесосить", "checked": false }
+      { "id": 6, "name": "Почистить ванну", "checked": false },
+      { "id": 7, "name": "Пропылесосить", "checked": false },
+      { "id": 8, "name": "Помыть посуду", "checked": true },
+      { "id": 9, "name": "Постирать бельё", "checked": false }
     ]
   },
   {
     "id": 3,
     "name": "Работа",
     "items": [
-      { "id": 5, "name": "Ответить на письма", "checked": true },
-      { "id": 6, "name": "Созвон с командой", "checked": false }
+      { "id": 10, "name": "Ответить на письма", "checked": true },
+      { "id": 11, "name": "Созвон с командой", "checked": false },
+      { "id": 12, "name": "Подготовить отчёт", "checked": false },
+      { "id": 13, "name": "Проверить задачи", "checked": true }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Путешествие",
+    "items": [
+      { "id": 14, "name": "Забронировать отель", "checked": false },
+      { "id": 15, "name": "Купить билеты", "checked": true },
+      { "id": 16, "name": "Собрать чемодан", "checked": false },
+      { "id": 17, "name": "Распечатать маршрут", "checked": false }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Учёба",
+    "items": [
+      { "id": 18, "name": "Посмотреть лекцию", "checked": true },
+      { "id": 19, "name": "Сдать задание", "checked": false },
+      { "id": 20, "name": "Прочитать статью", "checked": false },
+      { "id": 21, "name": "Подготовиться к тесту", "checked": true },
+      { "id": 22, "name": "Конспектировать", "checked": false }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Здоровье",
+    "items": [
+      { "id": 23, "name": "Записаться к стоматологу", "checked": false },
+      { "id": 24, "name": "Купить витамины", "checked": true },
+      { "id": 25, "name": "Сделать зарядку", "checked": false },
+      { "id": 26, "name": "Сходить на массаж", "checked": false },
+      { "id": 27, "name": "Проверить давление", "checked": true }
     ]
   }
 ]
