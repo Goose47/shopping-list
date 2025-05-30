@@ -1,6 +1,7 @@
 <template>
   <div
       class="list-item"
+      :style="{ transitionDelay: delay + 'ms' }"
   >
     <div
       class="left-section"
@@ -36,6 +37,7 @@ import {color} from "../../theme/colors.js";
 const props = defineProps({
   active: { required: true, type: Boolean },
   showLeftSection: { required: false, type: Boolean, default: false },
+  delay: { required: false, type: Number, default: 0 },
 })
 
 // Touch events handling.

@@ -23,6 +23,9 @@
 .list-leave-active {
   transition: all 0.2s ease;
 }
+.list-leave-active {
+  transition-delay: 0s !important;
+}
 .list-enter-from,
 .list-leave-to {
   opacity: 0;

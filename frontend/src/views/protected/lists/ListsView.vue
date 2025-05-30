@@ -2,10 +2,11 @@
   <app-page title="Списки">
     <swipeable-list-component>
       <swipeable-list-item-component
-          v-for="list in filteredLists"
+          v-for="(list, idx) in filteredLists"
           :key="list.id"
           :show-left-section="!!selectedList"
           :active="isListCompleted(list)"
+          :delay="idx * 50"
       >
         <template #left>
           <app-button @click="unselectList">
@@ -31,7 +32,7 @@
       <swipeable-list-item-component
           v-for="(item, idx) in filteredItems"
           :key="item.id"
-          :style="{ transitionDelay: (idx * 100) + 'ms' }"
+          :delay="idx * 50"
           :active="item.checked"
        >
         <template #left>
