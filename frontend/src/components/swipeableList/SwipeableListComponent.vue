@@ -32,6 +32,6 @@
   transform: translateX(100px);
 }
 .list-leave-active {
-  position: absolute;
+  //position: absolute;
 }
 </style>
