@@ -18,7 +18,7 @@ const scrollToBottom = () => {
         top: document.body.scrollHeight,
         behavior: 'smooth' // плавная прокрутка, можно убрать
       })
-    }, 0)
+    }, 100)
   })
 }
 
