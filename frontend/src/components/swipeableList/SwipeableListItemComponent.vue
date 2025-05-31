@@ -15,15 +15,18 @@
           'content__active': active,
         }"
         @touchstart="onTouchStart($event)"
-        @touchmove="onTouchMove($event, 1)"
-        @touchend="onTouchEnd(1)"
-        :style="getContentStyle(1)"
+        @touchmove="onTouchMove($event)"
+        @touchend="onTouchEnd()"
+        @mousedown="onTouchStart($event)"
+        @mousemove="onTouchMove($event)"
+        @mouseup="onTouchEnd()"
+        :style="getContentStyle()"
     >
       <slot name="content"></slot>
     </div>
     <div
         class="right-section"
-        :style="getRightSectionStyle(1)"
+        :style="getRightSectionStyle()"
     >
       <slot name="right"></slot>
     </div>
@@ -32,7 +35,7 @@
 
 <script setup>
 import {ref} from "vue";
-import {color} from "../../theme/colors.js";
+import {color} from "@/theme/colors.js";
 
 const props = defineProps({
   active: { required: true, type: Boolean },
@@ -43,44 +46,50 @@ const props = defineProps({
 // Touch events handling.
 const touchStartX = ref(0)
 const touchCurrentX = ref(0)
-const swipedListId = ref(null)
 const swipeOffset = ref(0)  // сдвиг в px
+const isMouseDown = ref(false)
+
+const getClientX = (event) => {
+  if (event.type.startsWith('touch')) {
+    return event.changedTouches[0].clientX
+  } else {
+    return event.clientX
+  }
+}
 
 const onTouchStart = (event) => {
-  const touch = event.changedTouches[0]
-  touchStartX.value = touch.clientX
-  touchCurrentX.value = touch.clientX
-  swipedListId.value = null
+  if (event.type === 'mousedown') isMouseDown.value = true
+  const clientX = getClientX(event)
+  touchStartX.value = clientX
+  touchCurrentX.value = clientX
   swipeOffset.value = 0
 }
 
-const onTouchMove = (event, id) => {
-  const touch = event.changedTouches[0]
-  touchCurrentX.value = touch.clientX
+const onTouchMove = (event) => {
+  if (event.type === 'mousemove' && !isMouseDown.value) return
+  touchCurrentX.value = getClientX(event)
   let deltaX = touchCurrentX.value - touchStartX.value
 
   if (deltaX < 0) { // свайп влево
     swipeOffset.value = Math.max(deltaX, -180) // лимит сдвига
-    swipedListId.value = id
   }
 }
 
 const maxOffset = -76
-const onTouchEnd = (id) => {
+const onTouchEnd = () => {
+  isMouseDown.value = false
   if (swipeOffset.value < -60) {
     // Если свайп достаточно большой, фиксируем кнопку показаной
     swipeOffset.value = maxOffset
-    swipedListId.value = id
   } else {
     // Если свайп маленький, сбрасываем
     swipeOffset.value = 0
-    swipedListId.value = null
   }
 }
 
-const getContentStyle = (id) => {
+const getContentStyle = () => {
   const marginLeft = props.showLeftSection ? '60px' : '0'
-  const marginRight = swipedListId.value === id ? `${-swipeOffset.value - 12}px` : '0'
+  const marginRight = `${-swipeOffset.value - 12}px`
 
   return {
     marginLeft: marginLeft,
@@ -96,8 +105,8 @@ const getLeftSectionStyle = () => {
     transition: 'left 0.25s ease',
   }
 }
-const getRightSectionStyle = (id) => {
-  const right = swipedListId.value === id ? '16px' : '-1000px'
+const getRightSectionStyle = () => {
+  const right = swipeOffset.value ? `${-swipeOffset.value-60}px` : '-1000px'
 
   return {
     right: right,
