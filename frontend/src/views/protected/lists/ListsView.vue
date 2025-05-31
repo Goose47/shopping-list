@@ -148,15 +148,15 @@ const listInput = ref(null)
 const newListText = ref('')
 const addList = () => {
   const newList = {
-    id: 900,
+    id: Date.now(),
     name: newListText.value,
     items: [],
   }
   lists.value.push(newList)
   newListText.value = ''
-  nextTick(() => {
+  // nextTick(() => {
     listInput.value?.focus()
-  })
+  // })
 }
 
 const filteredItems = computed(() => {
@@ -178,15 +178,15 @@ const itemInput = ref(null)
 const newItemText = ref('')
 const addItem = () => {
   const newItem = {
-    id: 900,
+    id: Date.now(),
     name: newItemText.value,
     checked: false,
   }
   selectedList.value.items.push(newItem)
   newItemText.value = ''
-  nextTick(() => {
+  // nextTick(() => {
     itemInput.value?.focus()
-  })
+  // })
 }
 </script>
 
