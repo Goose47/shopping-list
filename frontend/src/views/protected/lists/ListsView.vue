@@ -7,6 +7,7 @@
           :show-left-section="!!selectedList"
           :active="isListCompleted(list)"
           :delay="idx * 50"
+          @selected="selectList(list)"
       >
         <template #left>
           <app-button @click="unselectList">
@@ -15,7 +16,7 @@
         </template>
 
         <template #content>
-          <div @click="selectList(list)">
+          <div>
             {{ list.name }}
           </div>
         </template>
@@ -126,6 +127,7 @@ const selectList = (list) => {
   selectedList.value = list
 }
 const unselectList = () => {
+  console.log('unselect')
   selectedList.value = null
 }
 

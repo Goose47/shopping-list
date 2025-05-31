@@ -14,13 +14,14 @@
         :class="{
           'content__active': active,
         }"
-        @touchstart="onTouchStart($event)"
-        @touchmove="onTouchMove($event)"
-        @touchend="onTouchEnd()"
-        @mousedown="onTouchStart($event)"
-        @mousemove="onTouchMove($event)"
-        @mouseup="onTouchEnd()"
+        @touchstart="onTouchStart"
+        @touchmove="onTouchMove"
+        @touchend="onTouchEnd"
+        @mousedown="onTouchStart"
+        @mousemove="onTouchMove"
+        @mouseup="onTouchEnd"
         :style="getContentStyle()"
+        @click.prevent="onClick"
     >
       <slot name="content"></slot>
     </div>
@@ -48,6 +49,7 @@ const touchStartX = ref(0)
 const touchCurrentX = ref(0)
 const swipeOffset = ref(0)  // сдвиг в px
 const isMouseDown = ref(false)
+const wasSwipe = ref(false)
 
 const getClientX = (event) => {
   if (event.type.startsWith('touch')) {
@@ -57,7 +59,21 @@ const getClientX = (event) => {
   }
 }
 
+const emit = defineEmits(['selected'])
+const onClick = (event) => {
+  if (wasSwipe.value) {
+    event.stopImmediatePropagation()
+    event.stopPropagation()
+    event.preventDefault()
+    return
+  }
+
+  emit('selected')
+}
+
 const onTouchStart = (event) => {
+  event.preventDefault()
+  event.stopPropagation()
   if (event.type === 'mousedown') isMouseDown.value = true
   const clientX = getClientX(event)
   touchStartX.value = clientX
@@ -68,8 +84,11 @@ const onTouchStart = (event) => {
 const onTouchMove = (event) => {
   if (event.type === 'mousemove' && !isMouseDown.value) return
   touchCurrentX.value = getClientX(event)
-  let deltaX = touchCurrentX.value - touchStartX.value
+  const deltaX = touchCurrentX.value - touchStartX.value
 
+  if (Math.abs(deltaX) > 10) {
+    wasSwipe.value = true
+  }
   if (deltaX < 0) { // свайп влево
     swipeOffset.value = Math.max(deltaX, -180) // лимит сдвига
   }
@@ -77,6 +96,9 @@ const onTouchMove = (event) => {
 
 const maxOffset = -76
 const onTouchEnd = () => {
+  setTimeout(() => {
+    wasSwipe.value = false
+  }, 0)
   isMouseDown.value = false
   if (swipeOffset.value < -60) {
     // Если свайп достаточно большой, фиксируем кнопку показаной
