@@ -4,8 +4,7 @@
         class="text-input"
         v-model="model"
         :placeholder="placeholder"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
+        ref="input"
     />
   </div>
 </template>
@@ -20,7 +19,11 @@ const props = defineProps({
   placeholder: {type: String, default: 'Введите текст'}
 })
 
-const isFocused = ref(false)
+const input = ref(null)
+const focus = () => {
+  input.value.focus()
+}
+defineExpose({ focus })
 </script>
 
 <style scoped lang="scss">

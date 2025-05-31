@@ -66,12 +66,14 @@
               v-if="!selectedList"
               v-model="newListText"
               placeholder="Добавить"
+              ref="listInput"
           >
           </app-input>
           <app-input
               v-if="!!selectedList"
               v-model="newItemText"
               placeholder="Добавить"
+              ref="itemInput"
           >
           </app-input>
         </template>
@@ -97,7 +99,7 @@
 
 <script setup>
 import {color} from '@/theme/colors.js'
-import {ref, computed} from "vue";
+import {ref, computed, nextTick} from "vue";
 import testData from './testData.json'
 import ArrowLeftIcon from "@/components/icons/ArrowLeftIcon.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
@@ -142,6 +144,7 @@ const isListCompleted = (list) => {
   return list.items.filter(i => !i.checked).length === 0
 }
 
+const listInput = ref(null)
 const newListText = ref('')
 const addList = () => {
   const newList = {
@@ -151,6 +154,9 @@ const addList = () => {
   }
   lists.value.push(newList)
   newListText.value = ''
+  nextTick(() => {
+    listInput.value?.focus()
+  })
 }
 
 const filteredItems = computed(() => {
@@ -168,6 +174,7 @@ const removeItem = (item) => {
   selectedList.value.items = selectedList.value.items.filter(i => i.id !== item.id)
 }
 
+const itemInput = ref(null)
 const newItemText = ref('')
 const addItem = () => {
   const newItem = {
@@ -177,6 +184,9 @@ const addItem = () => {
   }
   selectedList.value.items.push(newItem)
   newItemText.value = ''
+  nextTick(() => {
+    itemInput.value?.focus()
+  })
 }
 </script>
 
