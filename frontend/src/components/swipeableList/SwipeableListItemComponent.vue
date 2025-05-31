@@ -152,6 +152,11 @@ const getRightSectionStyle = () => {
   background-color: v-bind('color("secondary_bg_color")');
   transition: margin-left 0.3s ease;
 
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
   &__active {
     background-color: v-bind('color("accent_text_color")');
   }
