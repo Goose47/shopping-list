@@ -1,12 +1,12 @@
 <template>
   <app-page title="Списки">
-    <swipeable-list-component>
+    <swipeable-list-component ref="listsList">
       <swipeable-list-item-component
           v-for="(list, idx) in filteredLists"
           :key="list.id"
           :show-left-section="!!selectedList"
           :active="isListCompleted(list)"
-          :delay="idx * 50"
+          :delay="Math.min(idx * 50, 350)"
           @selected="selectList(list)"
       >
         <template #left>
@@ -29,11 +29,11 @@
       </swipeable-list-item-component>
     </swipeable-list-component>
 
-    <swipeable-list-component>
+    <swipeable-list-component ref="itemsList">
       <swipeable-list-item-component
           v-for="(item, idx) in filteredItems"
           :key="item.id"
-          :delay="idx * 50"
+          :delay="Math.min(idx * 50, 350)"
           :active="item.checked"
           @selected="checkItem(item)"
        >
@@ -144,6 +144,7 @@ const isListCompleted = (list) => {
   return list.items.filter(i => !i.checked).length === 0
 }
 
+const listsList = ref(null)
 const listInput = ref(null)
 const newListText = ref('')
 const addList = () => {
@@ -154,9 +155,8 @@ const addList = () => {
   }
   lists.value.push(newList)
   newListText.value = ''
-  // nextTick(() => {
-    listInput.value?.focus()
-  // })
+  listInput.value?.focus()
+  listsList.value.scrollToBottom()
 }
 
 const filteredItems = computed(() => {
@@ -174,6 +174,7 @@ const removeItem = (item) => {
   selectedList.value.items = selectedList.value.items.filter(i => i.id !== item.id)
 }
 
+const itemsList = ref(null)
 const itemInput = ref(null)
 const newItemText = ref('')
 const addItem = () => {
@@ -184,9 +185,8 @@ const addItem = () => {
   }
   selectedList.value.items.push(newItem)
   newItemText.value = ''
-  // nextTick(() => {
-    itemInput.value?.focus()
-  // })
+  itemInput.value?.focus()
+  itemsList.value.scrollToBottom()
 }
 </script>
 

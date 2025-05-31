@@ -9,6 +9,20 @@
 </template>
 
 <script setup>
+import {nextTick, ref} from "vue";
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth' // плавная прокрутка, можно убрать
+      })
+    }, 0)
+  })
+}
+
+defineExpose({ scrollToBottom })
 </script>
 
 <style lang="scss">
