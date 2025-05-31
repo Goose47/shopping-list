@@ -54,6 +54,42 @@
         </template>
       </swipeable-list-item-component>
     </swipeable-list-component>
+
+    <template #footer>
+      <sliding-button-input
+          :show-right-section="!!newListText || !!newItemText"
+      >
+        <template #content>
+          <app-input
+              v-if="!selectedList"
+              v-model="newListText"
+              placeholder="Добавить"
+          >
+          </app-input>
+          <app-input
+              v-if="!!selectedList"
+              v-model="newItemText"
+              placeholder="Добавить"
+          >
+          </app-input>
+        </template>
+
+        <template #right>
+          <app-button
+              v-if="!selectedList"
+              @click="addList"
+          >
+            <arrow-right-icon/>
+          </app-button>
+          <app-button
+              v-if="!!selectedList"
+              @click="addItem"
+          >
+            <arrow-right-icon/>
+          </app-button>
+        </template>
+      </sliding-button-input>
+    </template>
   </app-page>
 </template>
 
@@ -63,8 +99,12 @@ import {ref, computed} from "vue";
 import testData from './testData.json'
 import ArrowLeftIcon from "@/components/icons/ArrowLeftIcon.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
-import SwipeableListComponent from "../../../components/swipeableList/SwipeableListComponent.vue";
-import SwipeableListItemComponent from "../../../components/swipeableList/SwipeableListItemComponent.vue";
+import SwipeableListComponent from "@/components/swipeableList/SwipeableListComponent.vue";
+import SwipeableListItemComponent from "@/components/swipeableList/SwipeableListItemComponent.vue";
+import AppInput from "@/components/ui/AppInput.vue";
+import SlidingButtonInput from "@/components/slidingButton/SlidingButtonInput.vue";
+import ArrowRightIcon from "@/components/icons/ArrowRightIcon.vue";
+
 
 const lists = ref([])
 const getLists = () => {
@@ -100,6 +140,17 @@ const isListCompleted = (list) => {
   return list.items.filter(i => !i.checked).length === 0
 }
 
+const newListText = ref('')
+const addList = () => {
+  const newList = {
+    id: 900,
+    name: newListText.value,
+    items: [],
+  }
+  lists.value.push(newList)
+  newListText.value = ''
+}
+
 const filteredItems = computed(() => {
   if (!selectedList.value) {
     return []
@@ -113,6 +164,17 @@ const checkItem = (item) => {
 
 const removeItem = (item) => {
   selectedList.value.items = selectedList.value.items.filter(i => i.id !== item.id)
+}
+
+const newItemText = ref('')
+const addItem = () => {
+  const newItem = {
+    id: 900,
+    name: newItemText.value,
+    checked: false,
+  }
+  selectedList.value.items.push(newItem)
+  newItemText.value = ''
 }
 </script>
 

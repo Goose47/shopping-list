@@ -1,5 +1,5 @@
 <template>
-  <div
+  <li
       class="list-item"
       :style="{ transitionDelay: delay + 'ms' }"
   >
@@ -27,7 +27,7 @@
     >
       <slot name="right"></slot>
     </div>
-  </div>
+  </li>
 </template>
 
 <script setup>

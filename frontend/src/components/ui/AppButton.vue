@@ -1,5 +1,5 @@
 <template>
-  <button class="button" @click="$emit('click')">
+  <button class="button">
     <slot></slot>
   </button>
 </template>
@@ -11,6 +11,7 @@ import { color } from '@/theme/colors.js'
 <style scoped lang="scss">
 .button {
   width: 100%;
+  height: 48px;
   padding: 12px;
   font-size: 16px;
   border: none;
