@@ -72,8 +72,6 @@ const onClick = (event) => {
 }
 
 const onTouchStart = (event) => {
-  event.preventDefault()
-  event.stopPropagation()
   if (event.type === 'mousedown') isMouseDown.value = true
   const clientX = getClientX(event)
   touchStartX.value = clientX

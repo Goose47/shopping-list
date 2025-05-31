@@ -35,6 +35,7 @@
           :key="item.id"
           :delay="idx * 50"
           :active="item.checked"
+          @selected="checkItem(item)"
        >
         <template #left>
           <app-button @click="unselectList">
@@ -43,7 +44,7 @@
         </template>
 
         <template #content>
-          <div @click="checkItem(item)">
+          <div>
             {{ item.name }}
           </div>
         </template>
@@ -127,7 +128,6 @@ const selectList = (list) => {
   selectedList.value = list
 }
 const unselectList = () => {
-  console.log('unselect')
   selectedList.value = null
 }
 
