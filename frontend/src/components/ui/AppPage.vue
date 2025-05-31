@@ -23,7 +23,7 @@ const props = defineProps({
   padding: 16px;
   background-color: v-bind('color("bg_color")');
   color: v-bind('color("text_color")');
-  min-height: 100vh;
+  min-height: calc(100vh - 72px);
   overflow-x: hidden;
   position: relative;
 
